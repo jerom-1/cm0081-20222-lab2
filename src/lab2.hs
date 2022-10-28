@@ -21,6 +21,13 @@ instance Arbitrary Nat where
         shrink (Succ n) = n : shrink n
 
 
+--Predecessor function
+--
+predC :: Nat -> Nat
+predC Zero			= Zero
+predC (Succ n) = n
+
+
 --Functor that produces recursion with Nats
 --
 recNat :: a -> (Nat -> a -> a) -> Nat -> a
@@ -46,7 +53,7 @@ auxList m Zero			= [Zero]
 auxList m (Succ n)	= m:auxList m n
 
 
---Product fucntios. 2 implementations
+--Product functios. 2 implementations
 --
 prodP :: Nat -> Nat -> Nat
 prodP m n = foldl addR Zero (auxList m n)		--Folds over a list with addR
@@ -54,4 +61,23 @@ prodP m n = foldl addR Zero (auxList m n)		--Folds over a list with addR
 prodR :: Nat -> Nat -> Nat
 prodR Zero a		 = Zero											--Base case for the recursion
 		--Nest n succesors after n (m times)
-prodR (Succ m) n = recNat n (\ _ y -> Succ y) (prodR m n)
+prodR m n = recNat n (\ _ y -> Succ y) (prodR (predC m) n)
+
+
+--Power functions. 2 implementations
+--
+powP :: Nat -> Nat -> Nat
+powP x Zero = Succ Zero
+powP x (Succ Zero) = x
+powP x (Succ n)    = prodR x (powP x n)
+
+powR :: Nat -> Nat -> Nat
+powR a Zero        = Succ Zero
+powR a (Succ Zero) = a
+powR x (Succ n)=recNat (powP x n) (\ _ y -> Succ y) (prodR (predC x) (powP x n))
+
+
+
+--Dummy test variables
+t1 = fromNatural 2
+t2 = fromNatural 3
