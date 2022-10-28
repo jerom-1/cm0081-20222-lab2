@@ -79,6 +79,25 @@ powR a (Succ Zero) = a
 powR x (Succ n)=recNat (powP x n) (\ _ y -> Succ y) (prodR (predC x) (powP x n))
 
 
+-- Factorial functions. 2 implementations
+facP :: Nat -> Nat
+facP (Succ Zero) = (Succ Zero)
+facP (Succ x)    = prodP (Succ x) (facP x)
+
+facR :: Nat -> Nat
+facR (Succ Zero) = (Succ Zero)
+facR (Succ x)    = (recNat (facR x) (\ _ y -> Succ y) (prodR x (facR x)))
+
+
+-- Identity function
+
+iden :: Nat -> Nat
+iden x = recNat x (\ _ x -> x) Zero
+
+-- Signum function (No recnat yet)
+signumR :: Nat -> Nat
+signumR Zero   = Zero
+signumR Succ{} = Succ Zero
 
 --Dummy test variables
 t1 = fromNatural 2
