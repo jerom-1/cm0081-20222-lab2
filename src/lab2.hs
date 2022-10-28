@@ -21,13 +21,6 @@ instance Arbitrary Nat where
         shrink (Succ n) = n : shrink n
 
 
---Predecessor function
---
-predC :: Nat -> Nat
-predC Zero			= Zero
-predC (Succ n) = n
-
-
 --Functor that produces recursion with Nats
 --
 recNat :: a -> (Nat -> a -> a) -> Nat -> a
@@ -45,6 +38,15 @@ addR :: Nat -> Nat -> Nat
 addR m n = recNat n (\ _ y -> Succ y) m			--Nest m successors after n
 
 
+--Predecessor function. 2 implementations
+--
+predC :: Nat -> Nat
+predC Zero			= Zero
+predC (Succ n) = n
+
+predR :: Nat -> Nat
+predR Zero        = Zero
+predR (Succ n)    = recNat n (\ x _ -> x) Zero
 --Auxiliar function to create lists
 --return list of size n with m as every element
 --
