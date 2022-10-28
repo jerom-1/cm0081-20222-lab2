@@ -62,7 +62,7 @@ prodP m n = foldl addR Zero (auxList m n)		--Folds over a list with addR
 
 prodR :: Nat -> Nat -> Nat
 prodR Zero a		 = Zero											--Base case for the recursion
-		--Nest n succesors after n (m times)
+--Nest n succesors after n (m times)
 prodR m n = recNat n (\ _ y -> Succ y) (prodR (predC m) n)
 
 
@@ -80,24 +80,43 @@ powR x (Succ n)=recNat (powP x n) (\ _ y -> Succ y) (prodR (predC x) (powP x n))
 
 
 -- Factorial functions. 2 implementations
+--
 facP :: Nat -> Nat
-facP (Succ Zero) = (Succ Zero)
+facP Zero        = (Succ Zero)
 facP (Succ x)    = prodP (Succ x) (facP x)
 
 facR :: Nat -> Nat
-facR (Succ Zero) = (Succ Zero)
+facR Zero = (Succ Zero)
 facR (Succ x)    = (recNat (facR x) (\ _ y -> Succ y) (prodR x (facR x)))
 
 
 -- Identity function
+--
+idenP :: Nat -> Nat
+idenP x = x
 
-iden :: Nat -> Nat
-iden x = recNat x (\ _ x -> x) Zero
+idenR :: Nat -> Nat
+idenR x = recNat x (\ _ x -> x) Zero
+
 
 -- Signum function (No recnat yet)
 signumR :: Nat -> Nat
 signumR Zero   = Zero
 signumR Succ{} = Succ Zero
+
+
+-- Property Check
+--
+binaryComp = [prodP,powP]
+unaryComp  = [facP,predC,idenP]
+
+binaryCheck = [prodR,powR]
+unaryCheck  = [facR,predR,idenR]
+
+propCheckUn :: [Nat -> Nat] -> [Nat -> Nat] ->  Nat -> Bool --function, number, state
+propCheckUn [] _ _ = True
+propCheckUn (x:xs) (y:ys) i = (x i == y i) && propCheckUn xs ys i
+
 
 --Dummy test variables
 t1 = fromNatural 2
