@@ -7,10 +7,10 @@ import Test.QuickCheck(verboseCheck)
 --Instances of functions to test
 --
 comparator :: [Nat->Nat->Nat]
-comparator = [predP,idenP,prodP,addP,subsP]
+comparator = [predP,idenP,prodP,signumP,subsP]
 
 check :: [Nat->Nat->Nat]
-check      = [predR,idenR,prodR,addR,subsR]
+check      = [predR,idenR,prodR,signumR,subsR]
 
 
 --Property check function

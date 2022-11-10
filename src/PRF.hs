@@ -90,10 +90,17 @@ idenR :: Nat -> Nat -> Nat
 idenR x _ = recNat x (\ _ w -> w) Zero
 
 
+--Signum
+
+signumR :: Nat -> Nat -> Nat
+signumR Zero _     = Zero
+signumR (Succ _) _ = recNat (Succ Zero) idenP Zero
+
+
 -- Signum function (No recnat yet)
-signumR :: Nat -> Nat
-signumR Zero   = Zero
-signumR Succ{} = Succ Zero
+signumP :: Nat -> Nat -> Nat
+signumP Zero _   = Zero
+signumP (Succ _) _ = Succ Zero
 
 
 -- Trunc substraction
@@ -106,4 +113,4 @@ subsP (Succ x) (Succ y) = subsP x y
 subsR :: Nat -> Nat -> Nat
 subsR Zero _ = Zero
 subsR x Zero = x
-subsR x y    = recNat x (\ _ y -> predR y y) y 
+subsR x y    = recNat x (\ _ w -> predR w w) y 
