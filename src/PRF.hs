@@ -4,11 +4,11 @@ module PRF where
 import Numeric.Natural (Natural)
 import Test.QuickCheck(Arbitrary(..),arbitrarySizedNatural,shrink)
 
-fromNatural :: Natural -> Nat      -- Transforma 
+fromNatural :: Natural -> Nat      -- Transforma
 fromNatural 0 = Zero
 fromNatural n = Succ (fromNatural $ pred n)
 
-instance Arbitrary Nat where 
+instance Arbitrary Nat where
     arbitrary = fmap fromNatural arbitrarySizedNatural
     shrink Zero         = []
     shrink (Succ n)     = n : shrink n
@@ -23,8 +23,8 @@ recNat a h (Succ n) = h n (recNat a h n)
 --Addition Functions. 2 Implementations
 --
 addP :: Nat -> Nat -> Nat
-addP  Zero      n = n                      --Zero as module for addition 
-addP  (Succ m)  n = Succ (addP m n)        --Recursive performance 1+1+...	
+addP  Zero      n = n                      --Zero as module for addition
+addP  (Succ m)  n = Succ (addP m n)        --Recursive performance 1+1+...
 
 addR :: Nat -> Nat -> Nat
 addR m n = recNat n (\ _ y -> Succ y) m    --Nest m successors after n
@@ -96,3 +96,14 @@ signumR Zero   = Zero
 signumR Succ{} = Succ Zero
 
 
+-- Trunc substraction
+--
+subsP :: Nat -> Nat -> Nat
+subsP Zero _ = Zero
+subsP x Zero = x
+subsP (Succ x) (Succ y) = subsP x y
+
+subsR :: Nat -> Nat -> Nat
+subsR Zero _ = Zero
+subsR x Zero = x
+subsR x y    = recNat x (\ _ y -> predR y y) y 
