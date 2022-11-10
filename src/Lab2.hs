@@ -21,10 +21,7 @@ propCheckBi [] _ _ _          = True
 propCheckBi _ [] _ _          = True
 propCheckBi (x:xs) (y:ys) i j = (x i j == y i j) && propCheckBi xs ys i j
 
-prop_dummy :: (Nat -> Nat -> Nat) -> Nat -> Nat -> Bool
-prop_dummy x i j = x i j == powP i j
 
+--------------------------------------------------------------------------------
 main :: IO ()
 main = (verboseCheck $ propCheckBi comparator check)
---main = verboseCheck $ (propCheckBi binaryComp binaryCheck)
---main= verboseCheck $ prop_dummyuni facR
